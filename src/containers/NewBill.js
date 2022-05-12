@@ -15,16 +15,28 @@ export default class NewBill {
     this.billId = null
     new Logout({ document, localStorage, onNavigate })
   }
+  retour(e) {
+    e.preventDefault();
+    window.history.back();
+  };
   handleChangeFile = e => {
     e.preventDefault()
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
+    console.log(file.name)
+    // modif 
+    var forma = file.name.split('.').pop().trim()
+    forma = forma.toLowerCase()
+    console.log(forma)
+    // end modif
     const formData = new FormData()
+    //add modif
+    if (forma.includes("jpg") || forma.includes("jpeg") || forma.includes("png"))
+    {
     const email = JSON.parse(localStorage.getItem("user")).email
     formData.append('file', file)
     formData.append('email', email)
-
     this.store
       .bills()
       .create({
@@ -40,6 +52,9 @@ export default class NewBill {
         this.fileName = fileName
       }).catch(error => console.error(error))
   }
+    }
+    //end modif
+    
   handleSubmit = e => {
     e.preventDefault()
     console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)

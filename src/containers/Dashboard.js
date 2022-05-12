@@ -5,6 +5,7 @@ import { ROUTES_PATH } from '../constants/routes.js'
 import USERS_TEST from '../constants/usersTest.js'
 import Logout from "./Logout.js"
 
+
 export const filteredBills = (data, status) => {
   return (data && data.length) ?
     data.filter(bill => {
@@ -53,7 +54,12 @@ export const card = (bill) => {
 }
 
 export const cards = (bills) => {
+  
+  // const sortedbills = bills.sort((a, b) => b.date - a.date)
+  // console.log(bills.sort((a, b) => b.date - a.date))
+  console.log(bills)
   return bills && bills.length ? bills.map(bill => card(bill)).join("") : ""
+  // return bills && bills.length ? bills.map(bill => card(bill)).join("") : ""
 }
 
 export const getStatus = (index) => {
@@ -75,6 +81,7 @@ export default class {
     $('#arrow-icon1').click((e) => this.handleShowTickets(e, bills, 1))
     $('#arrow-icon2').click((e) => this.handleShowTickets(e, bills, 2))
     $('#arrow-icon3').click((e) => this.handleShowTickets(e, bills, 3))
+    
     new Logout({ localStorage, onNavigate })
   }
 
@@ -86,8 +93,12 @@ export default class {
   }
 
   handleEditTicket(e, bill, bills) {
+    // if (this.counter === undefined ) this.counter = 0
     if (this.counter === undefined || this.id !== bill.id) this.counter = 0
+
     if (this.id === undefined || this.id !== bill.id) this.id = bill.id
+    // if (this.id === undefined ) this.id = bill.id
+    console.log(this.counter)
     if (this.counter % 2 === 0) {
       bills.forEach(b => {
         $(`#open-bill${b.id}`).css({ background: '#0D5AE5' })
@@ -103,7 +114,7 @@ export default class {
         <div id="big-billed-icon" data-testid="big-billed-icon"> ${BigBilledIcon} </div>
       `)
       $('.vertical-navbar').css({ height: '120vh' })
-      this.counter ++
+      this.counter =0
     }
     $('#icon-eye-d').click(this.handleClickIconEye)
     $('#btn-accept-bill').click((e) => this.handleAcceptSubmit(e, bill))
@@ -142,16 +153,24 @@ export default class {
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(90deg)'})
       $(`#status-bills-container${this.index}`)
         .html("")
-      this.counter ++
+      this.counter =0
     }
-
+ 
+     // modif
     bills.forEach(bill => {
-      $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
+      console.log($(`#open-bill${bill.id}`).click)
+      $(`#open-bill${bill.id}`).unbind("click")
+    })
+    // end modif
+    bills.forEach(bill => {
+      console.log($(`#open-bill${bill.id}`).click)
+      $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills) )
     })
 
     return bills
 
   }
+  
 
   getBillsAllUsers = () => {
     if (this.store) {

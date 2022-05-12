@@ -13,6 +13,11 @@ export default class {
     if (iconEye) iconEye.forEach(icon => {
       icon.addEventListener('click', () => this.handleClickIconEye(icon))
     })
+    // add event btn download
+    const iconDownload = document.querySelectorAll(`div[data-testid="icon-download"]`)
+    if (iconDownload) iconDownload.forEach(icon => {
+      icon.addEventListener('click', () => this.handleClickIconDownload(icon))
+    })
     new Logout({ document, localStorage, onNavigate })
   }
 
@@ -25,6 +30,16 @@ export default class {
     const imgWidth = Math.floor($('#modaleFile').width() * 0.5)
     $('#modaleFile').find(".modal-body").html(`<div style='text-align: center;' class="bill-proof-container"><img width=${imgWidth} src=${billUrl} alt="Bill" /></div>`)
     $('#modaleFile').modal('show')
+  }
+
+  //add btn download function 
+  handleClickIconDownload = (icon) => {
+    console.log(icon.querySelector('#download_link'))
+    const link_dl = icon.querySelector('#download_link')
+    const billUrl = icon.getAttribute("data-bill-url")
+    link_dl.setAttribute('href',billUrl)
+    console.log(link_dl)
+    link_dl.click()
   }
 
   getBills = () => {
